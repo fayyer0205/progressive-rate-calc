@@ -1,0 +1,18 @@
+# 环境与密钥
+venv/
+.venv/
+.env
+*.pyc
+__pycache__/
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store

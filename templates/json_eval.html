@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON 评分结果解析工具</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>JSON 评分结果解析工具</h1>
+            <p class="subtitle">上传「id + JSON」Excel，在线展开为结构化表格，可一键导出 CSV</p>
+            <p class="subtitle">
+                <a href="{{ url_for('index') }}" class="link-back">← 返回对话分析主页</a>
+            </p>
+        </header>
+
+        <section class="card upload-card">
+            <h2>上传 Excel 文件</h2>
+            <p>格式要求：第 1 列为 <strong>id</strong>，第 2 列为 <strong>JSON 内容</strong>，扩展名为 .xlsx / .xls。</p>
+            <div class="top-bar-uploads">
+                <div class="upload-cell">
+                    <span class="upload-cell-label">评分结果 Excel</span>
+                    <div class="upload-zone" id="jsonUploadZone">
+                        <input type="file" id="jsonFileInput" accept=".xlsx,.xls" hidden>
+                        <div class="upload-placeholder">
+                            <span class="upload-icon">📁</span>
+                            <span>.xlsx / .xls</span>
+                        </div>
+                    </div>
+                    <div class="upload-cell-footer">
+                        <span id="jsonUploadResult" class="upload-result hidden"></span>
+                        <button type="button" class="btn btn-secondary btn-sm" id="btnClearJsonExcel">清除</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="card result-card" id="jsonResultCard" style="display: none;">
+            <div class="module-header">
+                <h2>解析结果</h2>
+                <div>
+                    <button type="button" class="btn btn-secondary btn-sm" id="btnExportCsv">导出为 CSV</button>
+                </div>
+            </div>
+            <div class="table-wrapper">
+                <table id="jsonResultTable">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="{{ url_for('static', filename='json_eval.js') }}"></script>
+</body>
+</html>
+
