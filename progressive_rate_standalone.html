@@ -88,6 +88,35 @@
         .progressive-rate-page .modal-box .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
         .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); padding: 0.75rem 1.5rem; background: #333; color: #fff; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 1001; font-size: 13px; }
         .toast.hidden { display: none; }
+        /* 手机/小屏适配 */
+        @media (max-width: 768px) {
+            .progressive-rate-wrap { padding: 12px 0; }
+            .progressive-rate .container { padding: 0 12px; }
+            .progressive-rate .pr-header { margin-bottom: 14px; }
+            .progressive-rate .pr-title { font-size: 18px; }
+            .progressive-rate .pr-desc { font-size: 12px; }
+            .progressive-rate .share-bar { flex-direction: column; align-items: stretch; gap: 8px; max-width: 100%; padding: 0 4px; }
+            .progressive-rate .share-url-display { max-width: none; font-size: 11px; }
+            .progressive-rate .page-layout { flex-direction: column; gap: 14px; align-items: stretch; }
+            .progressive-rate .sidebar { width: 100%; max-width: none; order: 1; }
+            .progressive-rate .main-content { max-width: none; order: 2; }
+            .progressive-rate .pr-right-block { max-width: none; }
+            .progressive-rate .card { padding: 14px; margin-bottom: 12px; }
+            .progressive-rate .pr-io-row { flex-direction: column; align-items: stretch; gap: 8px; }
+            .progressive-rate .pr-io-label { width: auto; }
+            .progressive-rate .pr-io-input { width: 100%; min-width: 0; }
+            .progressive-rate .pr-io-row .btn-primary { margin-left: 0; margin-top: 4px; min-height: 44px; }
+            .progressive-rate .btn { min-height: 40px; padding: 8px 14px; }
+            .progressive-rate .btn-sm { min-height: 36px; padding: 6px 12px; }
+            .progressive-rate .unit-config { flex-direction: column; align-items: flex-start; }
+            .progressive-rate .tiers-table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 -12px; padding: 0 12px; }
+            .progressive-rate .tiers-table { min-width: 280px; font-size: 12px; }
+            .progressive-rate .tiers-table th, .progressive-rate .tiers-table td { padding: 8px 6px; }
+            .progressive-rate .tiers-table input[type="number"] { min-width: 60px; font-size: 12px; height: 36px; }
+            .progressive-rate .template-actions button { min-height: 36px; padding: 6px 10px; }
+            .progressive-rate-page .modal-box { min-width: 0; width: calc(100% - 24px); margin: 12px; max-width: none; }
+            .progressive-rate-page .toast { bottom: 1.5rem; left: 12px; right: 12px; transform: none; width: auto; max-width: none; }
+        }
     </style>
 </head>
 <body class="progressive-rate-page">
@@ -147,17 +176,19 @@
                 </select>
             </div>
             <p class="pr-card-note">区间上限留空表示该档「以上」无上限。</p>
-            <table class="tiers-table">
-                <thead>
-                    <tr>
-                        <th>区间下限（<span class="unit-amount">万元</span>）</th>
-                        <th>区间上限（<span class="unit-amount">万元</span>）</th>
-                        <th>费率（<span class="unit-rate">‰</span>）</th>
-                        <th style="width: 4rem;"></th>
-                    </tr>
-                </thead>
-                <tbody id="tiersContainer"></tbody>
-            </table>
+            <div class="tiers-table-wrapper">
+                <table class="tiers-table">
+                    <thead>
+                        <tr>
+                            <th>区间下限（<span class="unit-amount">万元</span>）</th>
+                            <th>区间上限（<span class="unit-amount">万元</span>）</th>
+                            <th>费率（<span class="unit-rate">‰</span>）</th>
+                            <th style="width: 4rem;"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tiersContainer"></tbody>
+                </table>
+            </div>
         </section>
             </main>
         </div>
