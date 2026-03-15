@@ -65,6 +65,7 @@
         .progressive-rate .template-item { display: flex; align-items: center; gap: 6px; padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
         .progressive-rate .template-item:last-child { border-bottom: none; }
         .progressive-rate .template-name { flex: 1; font-size: 13px; color: #333; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .progressive-rate .template-name-edit { flex: 1; min-width: 0; font-size: 13px; padding: 2px 6px; border: 1px solid #2563eb; border-radius: 4px; box-sizing: border-box; }
         .progressive-rate .template-actions { flex-shrink: 0; display: flex; gap: 4px; }
         .progressive-rate .template-actions button { font-size: 12px; padding: 4px 8px; }
         .progressive-rate .main-content { flex: 1; min-width: 0; max-width: 680px; }
@@ -182,20 +183,6 @@
         </div>
     </div>
 
-    <div id="renameModal" class="modal-overlay hidden">
-        <div class="modal-box">
-            <h3>重命名模板</h3>
-            <div class="modal-body">
-                <label for="renameInput">新名称：</label>
-                <input type="text" id="renameInput" placeholder="请输入新名称" maxlength="50" autocomplete="off">
-            </div>
-            <div class="modal-actions">
-                <button type="button" class="btn btn-secondary btn-sm" id="btnRenameCancel">取消</button>
-                <button type="button" class="btn btn-primary btn-sm" id="btnRenameConfirm">确定</button>
-            </div>
-        </div>
-    </div>
-
     <script>
 (function () {
     const baseInput = document.getElementById('baseInput');
@@ -269,8 +256,34 @@
             btn.addEventListener('click', function (e) {
                 e.stopPropagation();
                 var id = this.dataset.id;
+                var li = btn.closest('.template-item');
+                var nameSpan = li.querySelector('.template-name');
+                if (!nameSpan) return;
                 var t = getTemplates().find(function (x) { return x.id === id; });
-                openRenameModal(id, t ? (t.name || '') : '');
+                var currentName = t ? (t.name || '') : '';
+                var inp = document.createElement('input');
+                inp.type = 'text';
+                inp.className = 'template-name-edit';
+                inp.value = currentName;
+                inp.dataset.id = id;
+                inp.maxLength = 50;
+                inp.setAttribute('autocomplete', 'off');
+                function doSave() {
+                    var newName = inp.value.trim();
+                    if (!newName) { showToast('名称不能为空'); inp.focus(); return; }
+                    var list = getTemplates();
+                    var item = list.find(function (x) { return x.id === id; });
+                    if (item) { item.name = newName; saveTemplates(list); renderTemplateList(); showToast('已重命名'); }
+                }
+                function doCancel() { renderTemplateList(); }
+                inp.addEventListener('keydown', function (ev) {
+                    if (ev.key === 'Enter') { ev.preventDefault(); doSave(); }
+                    else if (ev.key === 'Escape') { ev.preventDefault(); doCancel(); }
+                });
+                inp.addEventListener('blur', doSave);
+                nameSpan.parentNode.replaceChild(inp, nameSpan);
+                inp.focus();
+                inp.select();
             });
         });
         list.querySelectorAll('.btn-template-delete').forEach(function (btn) {
@@ -283,18 +296,6 @@
                 showToast('已删除该模板');
             });
         });
-    }
-
-    function openRenameModal(id, currentName) {
-        window._renameTemplateId = id;
-        document.getElementById('renameInput').value = currentName;
-        document.getElementById('renameModal').classList.remove('hidden');
-        document.getElementById('renameInput').focus();
-    }
-
-    function closeRenameModal() {
-        document.getElementById('renameModal').classList.add('hidden');
-        window._renameTemplateId = null;
     }
 
     function openSaveSchemeModal() {
@@ -326,17 +327,6 @@
         renderTiers();
         showToast('已清空为新建模板');
     });
-    document.getElementById('btnRenameCancel').addEventListener('click', closeRenameModal);
-    document.getElementById('btnRenameConfirm').addEventListener('click', function () {
-        var id = window._renameTemplateId;
-        if (!id) return;
-        var newName = document.getElementById('renameInput').value.trim();
-        if (!newName) { showToast('请输入新名称'); return; }
-        var list = getTemplates();
-        var t = list.find(function (x) { return x.id === id; });
-        if (t) { t.name = newName; saveTemplates(list); renderTemplateList(); closeRenameModal(); showToast('已重命名'); }
-    });
-
     const defaultTiers = [
         { lower: 0, upper: 200, rate: 3.30 },
         { lower: 200, upper: 500, rate: 2.80 },
