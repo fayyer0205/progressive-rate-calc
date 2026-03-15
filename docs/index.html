@@ -78,19 +78,16 @@
         .progressive-rate .btn-secondary { background: #fff; border: 1px solid #d0d0d0; color: #555; }
         .progressive-rate .btn-secondary:hover { background: #f5f5f5; border-color: #b8b8b8; color: #333; }
 
-        /* 弹窗 */
-        .progressive-rate .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center; z-index: 1000; }
-        .progressive-rate .modal-overlay.hidden { display: none; }
-        .progressive-rate .modal-box { background: #fff; border: 1px solid #e4e6e8; border-radius: 6px; padding: 20px; min-width: 300px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
-        .progressive-rate .modal-box h3 { font-size: 14px; font-weight: 600; color: #1f1f1f; margin: 0 0 14px 0; }
-        .progressive-rate .modal-box .modal-body { margin-bottom: 14px; }
-        .progressive-rate .modal-box .modal-body label { font-size: 13px; color: #555; }
-        .progressive-rate .modal-box input[type="text"] { width: 100%; padding: 8px 10px; font-size: 13px; margin-top: 4px; box-sizing: border-box; border: 1px solid #dcdee0; border-radius: 4px; }
-
-        /* 提示与隐藏 */
+        /* 弹窗：整页正中覆盖 */
+        .progressive-rate-page .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+        .progressive-rate-page .modal-overlay.hidden { display: none; }
+        .progressive-rate-page .modal-box { background: #fff; border: 1px solid #e4e6e8; border-radius: 6px; padding: 20px; min-width: 320px; max-width: 90vw; box-shadow: 0 4px 24px rgba(0,0,0,0.15); }
+        .progressive-rate-page .modal-box.modal-save-scheme .modal-prompt { font-size: 14px; color: #333; margin: 0 0 12px 0; }
+        .progressive-rate-page .modal-box .modal-scheme-input { width: 100%; padding: 8px 12px; font-size: 14px; margin-bottom: 16px; box-sizing: border-box; border: 1px solid #dcdee0; border-radius: 4px; }
+        .progressive-rate-page .modal-box .modal-scheme-input:focus { outline: none; border-color: #2563eb; }
+        .progressive-rate-page .modal-box .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
         .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); padding: 0.75rem 1.5rem; background: #333; color: #fff; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 1001; font-size: 13px; }
         .toast.hidden { display: none; }
-        .modal-box .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
     </style>
 </head>
 <body class="progressive-rate-page">
@@ -99,7 +96,7 @@
         <header class="pr-header">
             <h1 class="pr-title">差额定率累进计算</h1>
             <p class="pr-desc">按档位区间与费率计算总费用（基数落在各档位部分 × 对应费率后累加）</p>
-            <p class="pr-share-hint">本页为独立 HTML，可直接用浏览器打开或放到任意网页服务器使用。分享给同事时发送本文件或访问链接即可。</p>
+            <p class="pr-share-hint">将下方链接分享给同事即可使用。</p>
             <div class="share-bar">
                 <span id="shareUrlDisplay" class="share-url-display"></span>
                 <button type="button" class="btn btn-secondary btn-sm" id="btnCopyLink">复制链接</button>
@@ -170,12 +167,9 @@
     <div id="toast" class="toast hidden"></div>
 
     <div id="saveSchemeModal" class="modal-overlay hidden">
-        <div class="modal-box">
-            <h3>保存档位方案</h3>
-            <div class="modal-body">
-                <label for="schemeNameInput">方案名称：</label>
-                <input type="text" id="schemeNameInput" placeholder="请输入方案名" maxlength="50" autocomplete="off">
-            </div>
+        <div class="modal-box modal-save-scheme">
+            <p class="modal-prompt">请输入方案名（用于在左侧模板列表中显示）</p>
+            <input type="text" id="schemeNameInput" class="modal-scheme-input" placeholder="方案名" maxlength="50" autocomplete="off">
             <div class="modal-actions">
                 <button type="button" class="btn btn-secondary btn-sm" id="btnSchemeCancel">取消</button>
                 <button type="button" class="btn btn-primary btn-sm" id="btnSchemeConfirm">确定</button>
@@ -231,7 +225,7 @@
             li.innerHTML =
                 '<span class="template-name" data-id="' + esc(t.id) + '" title="' + esc(t.name || '') + '">' + esc(t.name || '未命名') + '</span>' +
                 '<span class="template-actions">' +
-                '<button type="button" class="btn btn-secondary btn-sm btn-template-edit" data-id="' + esc(t.id) + '">编辑</button>' +
+                '<button type="button" class="btn btn-secondary btn-sm btn-template-edit" data-id="' + esc(t.id) + '">打开</button>' +
                 '<button type="button" class="btn btn-secondary btn-sm btn-template-rename" data-id="' + esc(t.id) + '">重命名</button>' +
                 '<button type="button" class="btn btn-secondary btn-sm btn-template-delete" data-id="' + esc(t.id) + '">删除</button>' +
                 '</span>';

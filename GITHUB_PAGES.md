@@ -34,7 +34,8 @@ git add progressive_rate_standalone.html
 git status
 git commit -m "Add progressive rate calculator and GitHub Pages docs"
 git branch -M main
-git remote add origin https://github.com/fayyer0205/progressive-rate-calc.git
+# 若从未添加过远程，先执行：git remote add origin https://github.com/fayyer0205/progressive-rate-calc.git
+# 若提示 remote origin already exists，说明已添加过，跳过上一步，直接执行：
 git push -u origin main
 ```
 
