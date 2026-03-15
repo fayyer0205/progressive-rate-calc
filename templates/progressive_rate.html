@@ -485,6 +485,20 @@
             .sort((a, b) => (a.lower || 0) - (b.lower || 0));
     }
 
+    function validateTierContinuity(list) {
+        if (list.length <= 1) return { ok: true };
+        for (var i = 0; i < list.length - 1; i++) {
+            var u = list[i].upper;
+            if (u === '' || u == null) return { ok: false, msg: '除最后一档外，每档区间上限不能为空，且本档上限须与下一档下限一致。' };
+            var upperNum = Number(u);
+            var nextLower = Number(list[i + 1].lower);
+            if (isNaN(upperNum) || isNaN(nextLower) || Math.abs(upperNum - nextLower) > 1e-9) {
+                return { ok: false, msg: '本档区间的上限必须与下一档区间的下限一致，请检查档位是否连续。' };
+            }
+        }
+        return { ok: true };
+    }
+
     function calcTotal() {
         const baseVal = parseNum(baseInput.value);
         if (baseVal == null || baseVal < 0) {
@@ -499,6 +513,12 @@
             totalOutput.textContent = '—';
             totalOutput.classList.add('empty');
             showToast('请至少配置一个有效档位（下限与费率必填）');
+            return;
+        }
+
+        var continuity = validateTierContinuity(list);
+        if (!continuity.ok) {
+            showToast(continuity.msg);
             return;
         }
 
